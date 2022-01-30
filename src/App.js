@@ -1,23 +1,70 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import Login from './components/Login';
+import Chatroom from './components/Chatroom';
+import {
+  Routes, 
+  Route,
+  BrowserRouter as Router, 
+  Navigate
+} from 'react-router-dom';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+
+function PrivateRoute({ component: Component, authenticated, ...rest}) {
+  return (
+      <Route 
+        {...rest} 
+        render={props => 
+          authenticated === true ? (
+            <Component {...props} />
+          ) : (
+            <Navigate 
+              to={{ pathname: "/", state: {from: props.location} }} 
+            />
+          )
+        } 
+      />
+  )
+}
+
+function PublicRoute({ component: Component, authenticated, ...rest}) {
+  return (
+      <Route 
+        {...rest} 
+        render={props => 
+          authenticated === false ? (
+            <Component {...props} />
+          ) : (
+            <Navigate to="chatroom" />
+          )
+        } 
+      />
+  )
+}
 
 function App() {
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    console.log("Authenticated", authenticated)
+    firebase.auth().onAuthStateChanged(user => {
+      console.log(user)
+      if (user) {
+        setAuthenticated(true)
+      } else {
+        setAuthenticated(false)
+      }
+    })
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <Routes>
+          <Route path='/' authenticated={authenticated} element={<Login />} />
+          <Route path='/chatroom' authenticated={authenticated} element={<Chatroom />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

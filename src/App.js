@@ -61,8 +61,17 @@ function App() {
     <div>
       <Router>
         <Routes>
-          <Route path='/' authenticated={authenticated} element={<Login />} />
-          <Route path='/chatroom' authenticated={authenticated} element={<Chatroom />} />
+          {authenticated ? 
+            <Route path='/chatroom' 
+              authenticated={authenticated} 
+              element={<Chatroom />} 
+            /> 
+          : 
+          <Route path='/' 
+            authenticated={authenticated} 
+            element={<Login />} 
+          />
+          }          
         </Routes>
       </Router>
     </div>

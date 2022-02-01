@@ -5,9 +5,18 @@ import 'firebase/compat/firestore';
 function Chatroom() {
   const firestore = firebase.firestore();
   useEffect(async () => {
-    const snapshot = await firestore.collection(`chats`).get();
-    snapshot.forEach((doc) => {
-      console.log(doc.id, '=>', doc.data());
+    // const snapshot = await firestore.collection(`chats`).get();
+    // snapshot.forEach((doc) => {
+    //   console.log(doc.id, '=>', doc.data());
+    // });
+    const query = firestore.collection('chats');
+
+    query.onSnapshot({
+      next: (querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data());
+        });
+      },
     });
   }, []);
 

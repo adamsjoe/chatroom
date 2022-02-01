@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Chatroom from './components/Chatroom';
 import {
-  Routes, 
   Route,
   BrowserRouter as Router, 
-  Navigate
+  Switch,
+  Redirect
 } from 'react-router-dom';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
@@ -18,7 +18,7 @@ function PrivateRoute({ component: Component, authenticated, ...rest}) {
           authenticated === true ? (
             <Component {...props} />
           ) : (
-            <Navigate 
+            <Redirect 
               to={{ pathname: "/", state: {from: props.location} }} 
             />
           )
@@ -35,7 +35,7 @@ function PublicRoute({ component: Component, authenticated, ...rest}) {
           authenticated === false ? (
             <Component {...props} />
           ) : (
-            <Navigate to="chatroom" />
+            <Redirect to="chatroom" />
           )
         } 
       />
@@ -60,19 +60,10 @@ function App() {
   return (
     <div>
       <Router>
-        <Routes>
-          {authenticated ? 
-            <Route path='/chatroom' 
-              authenticated={authenticated} 
-              element={<Chatroom />} 
-            /> 
-          : 
-          <Route path='/' 
-            authenticated={authenticated} 
-            element={<Login />} 
-          />
-          }          
-        </Routes>
+        <Switch>
+          <PublicRoute exact path='/' authenticated={authenticated} component={Login} />
+          <PrivateRoute exact path='/chatroom' authenticated={authenticated} component={Chatroom} />
+        </Switch>
       </Router>
     </div>
   );

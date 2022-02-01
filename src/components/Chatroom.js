@@ -43,11 +43,15 @@ function Chatroom() {
             <div style={{
               display: 'flex',
               flex: 1,
-              justifyContent: 'flex-start'}}>
+              justifyContent:
+              userId === localMessage.uid ? 'flex-end' : 'flex-start'}}>
               <div style={{
                 minHeight: 52,
                 width: 600,
                 backgroundColor: userId === localMessage.uid ? 'blue' : 'red',
+                color: 'white',
+                paddingLeft: 24,
+                fontWeight: 'bold',
                 marginTop: 24,
                 marginLeft: 24,
                 marginRight: 24,
@@ -56,18 +60,6 @@ function Chatroom() {
               </div>
             </div>),
           )}
-          <div style={{display: 'flex', flex: 1, justifyContent: 'flex-end'}}>
-            <div style={{
-              minHeight: 52,
-              width: 600,
-              backgroundColor: 'blue',
-              marginTop: 24,
-              marginLeft: 24,
-              marginRight: 24,
-              borderRadius: 12}}>
-              <p>Message from me</p>
-            </div>
-          </div>
         </div>
         <div style={{display: 'flex', flexDirection: 'row', marginTop: 24}}>
           <input style={{

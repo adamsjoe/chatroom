@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, {useState, useEffect} from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -84,17 +85,23 @@ function Chatroom() {
                 `${localImage.name}_${Math.random().toString(36)}`;
               const uploadTask =
               storage.ref(`/images/${uniqueLocalImage}`).put(localImage);
-              uploadTask.on('state_changed'),
-              () => {},
-              () => {},
-              async () => {
-                const fireBaseUrl = await
-                storage.ref('image').child(uniqueLocalImage).getDownloadURL();
-                console.log('image url', uniqueLocalImage);
-                const message = {context, timestamp, uid, image: fireBaseUrl};
-                // eslint-disable-next-line no-unused-vars
-                const docRef = await firestore.collection('chats').add(message);
-              };
+              console.log('xxxx');
+              uploadTask.on('state_changed',
+                  () => {},
+                  () => {},
+                  async () => {
+                    // eslint-disable-next-line max-len
+                    const fireBaseUrl = await storage.ref('images').child(uniqueLocalImage).getDownloadURL();
+                    console.log('>>>>> firebase url', fireBaseUrl);
+                    alert(fireBaseUrl);
+                    console.log('>>>>> image url', uniqueLocalImage);
+                    // eslint-disable-next-line max-len
+                    const message = {content, timestamp, uid, image: fireBaseUrl};
+                    // eslint-disable-next-line no-unused-vars
+                    // eslint-disable-next-line max-len
+                    // eslint-disable-next-line no-unused-vars
+                    const docRef = await firestore.collection('chats').add(message);
+                  });
             } else {
               const message = {content, timestamp, uid, image};
               // eslint-disable-next-line no-unused-vars
